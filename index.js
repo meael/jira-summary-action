@@ -3,7 +3,7 @@ const github = require("@actions/github");
 const JiraClient = require("jira-connector");
 
 const parseJiraIssueKey = (value) => {
-  const reg = /^((?!([A-Z0-9a-z]{1,10})-?$)[A-Z]{1}[A-Z0-9]+-[1-9][0-9]*)/g;
+  const reg = /((?!([A-Z0-9a-z]{1,10})-?$)[A-Z]{1}[A-Z0-9]+-[1-9][0-9]*)/g;
   const match = value.match(reg);
   return match ? match[0] : match;
 };
