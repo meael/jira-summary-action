@@ -37,7 +37,7 @@ jobs:
     name: A job to get pull request summary
     steps:
     - name: Jira summary
-      uses: meael/jira-summary-action@2.1
+      uses: meael/jira-summary-action@1.2.0
       with:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         jiraHost: ${{ secrets.JIRA_HOST }}
