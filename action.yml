@@ -1,0 +1,21 @@
+name: "Jira summary action"
+description: "Pull request summary from Jira"
+inputs:
+  githubToken:
+    description: "Will provided automatically by github actions"
+    required: false
+  jiraHost:
+    description: "Jira host"
+    required: true
+  jiraEmail: 
+    description: "Jira account email"
+    required: true
+  jiraToken:
+    description: "Jira account api token"
+    required: true
+outputs:
+  time: # id of output
+    description: "The time we greeted you"
+runs:
+  using: node12
+  main: dist/index.js
