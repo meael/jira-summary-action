@@ -44,7 +44,6 @@ const getUpdatedDescription = (a, b)=>{
     });
 
     const jiraIssueKeys = [];
-    const mergeCommitMessages = [];
     const otherCommitMessages = [];
 
     commits.forEach(({ commit }) => {
@@ -52,11 +51,6 @@ const getUpdatedDescription = (a, b)=>{
       if (jiraKey) {
         jiraIssueKeys.push(jiraKey);
         return;
-      }
-
-      if(commit.message.toLowerCase().includes('merge')){
-        mergeCommitMessages.push(commit.message);
-        return 
       }
 
       otherCommitMessages.push(commit.message);
@@ -88,16 +82,12 @@ const getUpdatedDescription = (a, b)=>{
     });
 
     const newDescription = `
-
 ---
 ### Jira changes
 ${formatMessages(jiraCommitMessages)}
 
 ### Other changes
 ${formatMessages(otherCommitMessages)}
-
-### Merges
-${formatMessages(mergeCommitMessages)}
 ---
 `;  
 
