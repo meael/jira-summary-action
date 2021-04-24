@@ -18,7 +18,7 @@ const parseJiraIssueKey = (value) => {
 const formatMessages = (messages) => {
   return messages
     .filter(Boolean)
-    .map((message) => `- ${message.replaceAll('\n\n', ' ')}`)
+    .map((message) => `- ${message.replace(/\n\n/g, ' ')}`)
     .join("\n");
 };
 
