@@ -1,0 +1,27 @@
+{
+    "inputs": {
+        "jiraHost": "exampleworkspace.atlassian.net",
+        "jiraEmail": "example@example.com",
+        "jiraToken": "<place jiraToken here>",
+        "githubToken": "<place githubToken here>"
+    },
+    "overrides": {
+        "github": {
+            "context": {
+                "payload": {
+                    "pull_request": {
+                        "number": 1,
+                        "base": {
+                            "repo": {
+                                "name": "some-repo-name",
+                                "owner": {
+                                    "login": "some-user-name"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

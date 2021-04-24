@@ -6,7 +6,8 @@
   "author": "meael <colddave@ya.ru>",
   "license": "MIT",
   "scripts": {
-    "package": "ncc build --source-map --license licenses.txt"
+    "dev": "node index.js --dev",
+    "build": "ncc build --source-map --license licenses.txt"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
