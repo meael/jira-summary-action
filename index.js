@@ -2,22 +2,22 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const JiraClient = require("jira-connector");
 
-const isDevMode = process.argv.slice(2)[0] === '--dev';
+const isDevMode = process.argv.slice(2)[0] === "--dev";
 
 let config = {
   jiraHost: core.getInput("jiraHost"),
   jiraEmail: core.getInput("jiraEmail"),
   jiraToken: core.getInput("jiraToken"),
   githubToken: core.getInput("githubToken"),
-}
+};
 
 if (isDevMode) {
   try {
     const { overrides, inputs } = require("./devConfig.json");
     config = { ...config, ...inputs };
-    github.context.payload = overrides.github.context.payload
+    github.context.payload = overrides.github.context.payload;
   } catch (err) {
-    console.error('dev config error: ', err.message);
+    console.error("dev config error: ", err.message);
   }
 }
 
@@ -30,15 +30,18 @@ const parseJiraIssueKey = (value) => {
 const formatCommitMessages = (messages) => {
   return messages
     .filter(Boolean)
-    .map((message) => `- ${message.replace(/\n\n/g, ' ')}`)
+    .map((message) => `- ${message.replace(/\n\n/g, " ")}`)
     .join("\n");
 };
 
 const getUpdatedPullDescription = (pullDescription, pullChangelog) => {
-  const reg = /<!-- generated changes start -->(.*?|\n|\r\n)*<!-- generated changes end -->/g;
+  const reg =
+    /<!-- generated changes start -->(.*?|\n|\r\n)*<!-- generated changes end -->/g;
   const match = pullDescription.match(reg);
-  return match ? pullDescription.replace(match[0], pullChangelog) : pullDescription + '\n' + pullChangelog;
-}
+  return match
+    ? pullDescription.replace(match[0], pullChangelog)
+    : pullDescription + "\n" + pullChangelog;
+};
 
 (async () => {
   try {
@@ -62,12 +65,14 @@ const getUpdatedPullDescription = (pullDescription, pullChangelog) => {
     commits.forEach(({ commit: { message } }) => {
       const jiraIssueKey = parseJiraIssueKey(message);
 
-      if (jiraIssueKey && !jiraIssueKeys.includes(jiraIssueKey)) {
-        jiraIssueKeys.push(jiraIssueKey);
+      if (jiraIssueKey) {
+        if (!jiraIssueKeys.includes(jiraIssueKey))
+          jiraIssueKeys.push(jiraIssueKey);
         return;
       }
 
-      if (!otherCommitMessages.includes(message)) otherCommitMessages.push(message);
+      if (!otherCommitMessages.includes(message))
+        otherCommitMessages.push(message);
     });
 
     const jira = new JiraClient({
@@ -84,12 +89,16 @@ const getUpdatedPullDescription = (pullDescription, pullChangelog) => {
           const issue = await jira.issue.getIssue({ issueKey });
           return `<a href="https://${jiraHost}/browse/${issueKey}">${issueKey}</a>: ${issue.fields.summary}`;
         } catch (err) {
-          return `${issueKey}: ${commits.filter((c) => c.includes(issueKey)).join("; ")}`
+          return `${issueKey}: ${commits
+            .filter((c) => c.includes(issueKey))
+            .join("; ")}`;
         }
       })
     );
 
-    const { data: { body: pullDescription } } = await octokit.pulls.get({
+    const {
+      data: { body: pullDescription },
+    } = await octokit.pulls.get({
       owner,
       repo,
       pull_number,
