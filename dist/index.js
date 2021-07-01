@@ -61,7 +61,7 @@ const getUpdatedPullDescription = (pullDescription, pullChangelog) => {
 
 (async () => {
   try {
-    const { jiraHost, jiraEmail, jiraToken, githubToken } = config;
+    const { jiraHost, jiraEmail, jiraToken, githubToken, ignoreMessages } = config;
 
     const owner = github.context.payload.pull_request.base.repo.owner.login;
     const repo = github.context.payload.pull_request.base.repo.name;
@@ -87,7 +87,8 @@ const getUpdatedPullDescription = (pullDescription, pullChangelog) => {
         return;
       }
 
-      const isIgnored = ignoreMessages.some((ignoreMessage) => {
+      const handledIgnoreMessages = ignoreMessages ? JSON.parse(ignoreMessages) : [];
+      const isIgnored = handledIgnoreMessages.some((ignoreMessage) => {
         return message.includes(ignoreMessage)
       });
 

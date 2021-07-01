@@ -37,11 +37,11 @@ jobs:
     name: A job to get pull request summary
     steps:
     - name: Jira summary
-      uses: meael/jira-summary-action@1.2.2
+      uses: meael/jira-summary-action@1.2.3
       with:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         jiraHost: ${{ secrets.JIRA_HOST }}
         jiraEmail: ${{ secrets.JIRA_EMAIL }}
         jiraToken: ${{ secrets.JIRA_TOKEN }}
-        ignoreMessages: ["Merge"]
+        ignoreMessages: '["Merge"]'
 ```
