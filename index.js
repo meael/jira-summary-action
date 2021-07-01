@@ -9,6 +9,7 @@ let config = {
   jiraEmail: core.getInput("jiraEmail"),
   jiraToken: core.getInput("jiraToken"),
   githubToken: core.getInput("githubToken"),
+  ignoreMessages: core.getInput("ignoreMessages"),
 };
 
 if (isDevMode) {
@@ -71,8 +72,13 @@ const getUpdatedPullDescription = (pullDescription, pullChangelog) => {
         return;
       }
 
-      if (!otherCommitMessages.includes(message))
+      const isIgnored = ignoreMessages.some((ignoreMessage) => {
+        return message.includes(ignoreMessage)
+      });
+
+      if (!otherCommitMessages.includes(message) && !isIgnored) {
         otherCommitMessages.push(message);
+      }
     });
 
     const jira = new JiraClient({

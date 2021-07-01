@@ -2,6 +2,14 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 6596:
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse("{\"inputs\":{\"jiraHost\":\"somepurchases.atlassian.net\",\"jiraEmail\":\"somepurchases@icloud.com\",\"jiraToken\":\"zxLsnifc48uIHPaEmqaGA818\",\"githubToken\":\"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\"},\"overrides\":{\"github\":{\"context\":{\"payload\":{\"pull_request\":{\"number\":16,\"base\":{\"repo\":{\"name\":\"test-action\",\"owner\":{\"login\":\"meael\"}}}}}}}}}");
+
+/***/ }),
+
 /***/ 2932:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -16,11 +24,12 @@ let config = {
   jiraEmail: core.getInput("jiraEmail"),
   jiraToken: core.getInput("jiraToken"),
   githubToken: core.getInput("githubToken"),
+  ignoreMessages: core.getInput("ignoreMessages"),
 };
 
 if (isDevMode) {
   try {
-    const { overrides, inputs } = __nccwpck_require__(139);
+    const { overrides, inputs } = __nccwpck_require__(6596);
     config = { ...config, ...inputs };
     github.context.payload = overrides.github.context.payload;
   } catch (err) {
@@ -78,8 +87,13 @@ const getUpdatedPullDescription = (pullDescription, pullChangelog) => {
         return;
       }
 
-      if (!otherCommitMessages.includes(message))
+      const isIgnored = ignoreMessages.some((ignoreMessage) => {
+        return message.includes(ignoreMessage)
+      });
+
+      if (!otherCommitMessages.includes(message) && !isIgnored) {
         otherCommitMessages.push(message);
+      }
     });
 
     const jira = new JiraClient({
@@ -67994,14 +68008,6 @@ function wrappy (fn, cb) {
     return ret
   }
 }
-
-
-/***/ }),
-
-/***/ 139:
-/***/ ((module) => {
-
-module.exports = eval("require")("./devConfig.json");
 
 
 /***/ }),
